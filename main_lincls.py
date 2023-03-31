@@ -372,14 +372,14 @@ def main_worker(gpu, ngpus_per_node, args):
 
     if args.conf_matrix:
         # load imagenet metadata
-        with open("imagenet_metadata.txt","r") as f:
+        with open("metadata_files/imagenet_metadata.txt","r") as f:
             data = [l.strip() for l in f.readlines()]
             imagenet_metadata_dict = {}
             for line in data:
                 wnid, classname = line.split('\t')[0], line.split('\t')[1]
                 imagenet_metadata_dict[wnid] = classname
 
-        with open(f'imagenet{args.nb_classes}_classes.txt', 'r') as f:
+        with open(f'metadata_files/imagenet{args.nb_classes}_classes.txt', 'r') as f:
             class_dir_list = [l.strip() for l in f.readlines()]
             class_dir_list = sorted(class_dir_list)
 

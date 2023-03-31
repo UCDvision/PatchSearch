@@ -41,8 +41,6 @@ parser.add_argument('-p', '--print-freq', default=50, type=int,
                     help='print frequency (default: 50)')
 parser.add_argument('--weights', type=str, required=True,
                     help='pre-trained model weights')
-parser.add_argument('--linear_weights', type=str,
-                    help='linear layer weights')
 parser.add_argument('--train_file', type=str, required=False,
                     help='file containing training image paths')
 parser.add_argument('--val_file', type=str, required=False,
@@ -441,7 +439,7 @@ def main():
         # clean experiment
         args.trigger_id, args.experiment_id = 1234, 'n02106550'
     class_id_to_name = {}
-    with open('im100_metadata.txt', 'r') as f:
+    with open('metadata_files/im100_metadata.txt', 'r') as f:
         for line in f.readlines():
             class_id = int(line.split()[1])
             class_name = ' '.join(line.split()[2:])

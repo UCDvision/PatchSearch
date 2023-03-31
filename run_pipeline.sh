@@ -16,32 +16,32 @@ SEED=4789
 # ### STEP 1.1: pretrain the model
 # python main_moco_files_dataset_strong_aug.py \
 #     --seed $SEED \
-#     -a vit_base --epochs 200 -b 256 \
+#     -a vit_base --epochs 200 -b 1024 \
 #     --stop-grad-conv1 --moco-m-cos \
 #     --multiprocessing-distributed --world-size 1 --rank 0 \
 #     --dist-url "tcp://localhost:$(( $RANDOM % 50 + 10000 ))" \
 #     --save_folder $EXP_DIR \
 #     $CODE_DIR/$EXPERIMENT_ID/train/loc_random_loc*_rate_${RATE}_targeted_True_*.txt
 
-# ### STEP 1.2: train a linear layer for evaluating the pretrained model
-# CUDA_VISIBLE_DEVICES=0 python main_lincls.py \
-#     --seed $SEED \
-#     -a vit_base --lr 0.1 \
-#     --pretrained $EXP_DIR/checkpoint_0199.pth.tar \
-#     --train_file linear_eval_files/train_ssl_0.01_filelist.txt \
-#     --val_file linear_eval_files/val_ssl_filelist.txt \
-#     --save_folder $EVAL_DIR
+### STEP 1.2: train a linear layer for evaluating the pretrained model
+CUDA_VISIBLE_DEVICES=0 python main_lincls.py \
+    --seed $SEED \
+    -a vit_base --lr 0.1 \
+    --pretrained $EXP_DIR/checkpoint_0199.pth.tar \
+    --train_file linear_eval_files/train_ssl_0.01_filelist.txt \
+    --val_file linear_eval_files/val_ssl_filelist.txt \
+    --save_folder $EVAL_DIR
 
-# ### STEP 1.3: evaluate the trained linear layer with clean and poisoned val data
-# CUDA_VISIBLE_DEVICES=0 python main_lincls.py \
-#     --seed $SEED \
-#     -a vit_base --lr 0.1 \
-#     --conf_matrix \
-#     --resume $EVAL_DIR/checkpoint.pth.tar \
-#     --train_file linear_eval_files/train_ssl_0.01_filelist.txt \
-#     --val_file linear_eval_files/val_ssl_filelist.txt \
-#     --val_poisoned_file $CODE_DIR/$EXPERIMENT_ID/val_poisoned/loc_random_*.txt \
-#     --eval_id exp_${SEED}
+### STEP 1.3: evaluate the trained linear layer with clean and poisoned val data
+CUDA_VISIBLE_DEVICES=0 python main_lincls.py \
+    --seed $SEED \
+    -a vit_base --lr 0.1 \
+    --conf_matrix \
+    --resume $EVAL_DIR/checkpoint.pth.tar \
+    --train_file linear_eval_files/train_ssl_0.01_filelist.txt \
+    --val_file linear_eval_files/val_ssl_filelist.txt \
+    --val_poisoned_file $CODE_DIR/$EXPERIMENT_ID/val_poisoned/loc_random_*.txt \
+    --eval_id exp_${SEED}
 
 ### STEP 2: run iterative search
 for i in {1..2}
@@ -53,7 +53,6 @@ do
         --arch moco_vit_base \
         --batch-size 64 \
         --weights $EXP_DIR/checkpoint_0199.pth.tar \
-        --linear_weights $EVAL_DIR/checkpoint.pth.tar \
         --train_file $CODE_DIR/$EXPERIMENT_ID/train/loc_random_loc*_rate_${RATE}_targeted_True_*.txt \
         --val_file linear_eval_files/val_ssl_filelist.txt \
         --prune_clusters \
