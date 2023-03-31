@@ -98,7 +98,7 @@ class FileListDataset(Dataset):
 
         self.poisons = []
         for poison_file in sorted(glob.glob(f'{poison_dir}/*.png')):
-            self.poisons.append(Image.open(poison_file))
+            self.poisons.append(Image.open(poison_file).convert('RGB'))
         self.poisons = self.poisons[:topk_poisons]
 
         with open(path_to_txt_file, 'r') as f:
@@ -250,7 +250,7 @@ def get_loaders(args):
     pos_inds = sorted_inds[:args.topk_poisons]
     neg_inds = sorted_inds[-args.topk_poisons:]
     train_inds = sorted_inds[int(args.top_p*len(train_dataset)):-args.topk_poisons]
-    logger.info('==> train dataset size {len(train_inds)/1000:.1f}k')
+    logger.info(f'==> train dataset size {len(train_inds)/1000:.1f}k')
 
     # step: take subset of the train dataset
     train_dataset.output_type = 'rand'
