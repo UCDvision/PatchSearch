@@ -161,3 +161,17 @@ CUDA_VISIBLE_DEVICES=0 python main_lincls.py \
     --val_poisoned_file $CODE_DIR/$EXPERIMENT_ID/val_poisoned/loc_random_*.txt \
     --eval_id exp_${seed}
 ```
+
+## Citation
+
+Tejankar, Ajinkya, et al. "Defending Against Patch-based Backdoor Attacks on Self-Supervised Learning." _Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition._ 2023.
+
+```
+@inproceedings{tejankar2023defending,
+  title={Defending Against Patch-based Backdoor Attacks on Self-Supervised Learning},
+  author={Tejankar, Ajinkya and Sanjabi, Maziar and Wang, Qifan and Wang, Sinong and Firooz, Hamed and Pirsiavash, Hamed and Tan, Liang},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={12239--12249},
+  year={2023}
+}
+```
