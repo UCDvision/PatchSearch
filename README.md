@@ -9,7 +9,7 @@ Code for the CVPR '23 paper, "Defending Against Patch-based Data Poisoning Backd
 4. Activate the environment with `conda activate patch_search`
 
 Note that we use a custom version of [pytorch-grad-cam](https://github.com/UCDvision/pytorch-grad-cam)
-since the original does not return the model output which is required by our code.
+since the original does not return the model output which is required by our code. You can install it with `pip install git+https://github.com/UCDvision/pytorch-grad-cam`
 
 ## Data
 
